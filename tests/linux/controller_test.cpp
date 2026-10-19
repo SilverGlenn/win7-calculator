@@ -1,0 +1,36 @@
+#include <QtTest>
+#include <QApplication>
+#include <QClipboard>
+#include <QKeyEvent>
+#include <QLocale>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QFile>
+#include "model/CalculatorController.h"
+using namespace Win7Calc;
+using Command=CalculationManager::Command;
+static void type(CalculatorController& c,const QString& input) {
+ for(auto ch:input){QKeyEvent e(QEvent::KeyPress,ch.isDigit()?Qt::Key_0+ch.digitValue():ch.unicode(),Qt::NoModifier,QString(ch));QVERIFY(c.handleKey(&e));}
+}
+class ControllerTest : public QObject {
+ Q_OBJECT
+private slots:
+ void initialState(){CalculatorController c;QVERIFY(c.state().mode==Mode::Standard);QVERIFY(c.state().panel==Panel::Basic);QCOMPARE(c.state().display.primary,L"0");QVERIFY(!c.state().historyVisible);QVERIFY(!c.state().digitGrouping);}
+ void transitionMatrix(){
+  CalculatorController c;c.setHistoryVisible(true);type(c,"12");
+  QFile f(QStringLiteral(FIXTURE_DIR "/ui-states.json"));QVERIFY(f.open(QIODevice::ReadOnly));
+  for(auto v:QJsonDocument::fromJson(f.readAll()).object()["matrix"].toArray()){
+   const auto row=v.toObject();c.setMode(static_cast<Mode>(row["modeIndex"].toInt()));c.setPanel(static_cast<Panel>(row["panelIndex"].toInt()));
+   QCOMPARE(static_cast<int>(c.state().mode),row["modeIndex"].toInt());QCOMPARE(static_cast<int>(c.state().panel),row["panelIndex"].toInt());
+   QVERIFY(c.state().historyVisible);QCOMPARE(c.historyAvailable(),row["historyAvailable"].toBool());
+  }
+  c.setMode(Mode::Standard);QCOMPARE(c.state().display.primary,L"0");QVERIFY(c.state().historyVisible);
+ }
+ void oneCommandPerKey(){CalculatorController c;type(c,"12+3");QKeyEvent enter(QEvent::KeyPress,Qt::Key_Return,Qt::NoModifier);QVERIFY(c.handleKey(&enter));QCOMPARE(c.state().display.primary,L"15");QKeyEvent unmapped(QEvent::KeyPress,Qt::Key_F12,Qt::NoModifier);QVERIFY(!c.handleKey(&unmapped));QCOMPARE(c.state().display.primary,L"15");}
+ void singleMemoryAcrossModes(){CalculatorController c;type(c,"12");c.send(Command::CommandSTORE);c.setMode(Mode::Scientific);c.send(Command::CommandRECALL);QCOMPARE(c.state().display.primary,L"12");c.setMode(Mode::Programmer);c.send(Command::CommandRECALL);QCOMPARE(c.state().display.primary,L"12");c.setMode(Mode::Standard);c.send(Command::CommandMCLEAR);QVERIFY(!c.state().display.memory);}
+ void clipboardValidation(){CalculatorController c;type(c,"12+");QSignalSpy errors(&c,&CalculatorController::invalidInput);for(const auto&s:QStringList{"", "1+2", "NaN",QString(4097,'9')}){QApplication::clipboard()->setText(s);c.paste();}QCOMPARE(errors.count(),4);type(c,"3");c.send(Command::CommandEQU);QCOMPARE(c.state().display.primary,L"15");QApplication::clipboard()->setText(QString::fromUtf8("−12.5"));c.paste();QCOMPARE(c.state().display.primary,L"-12.5");c.copy();QCOMPARE(QApplication::clipboard()->text(),"-12.5");}
+ void groupingNotValueMutation(){CalculatorController c;type(c,"12345");c.setDigitGrouping(true);QCOMPARE(c.state().display.primary,L"12,345");c.setDigitGrouping(false);QCOMPARE(c.state().display.primary,L"12345");c.send(Command::CommandADD);type(c,"1");c.send(Command::CommandEQU);QCOMPARE(c.state().display.primary,L"12346");}
+ void localizedClipboard(){QLocale old=QLocale();QLocale::setDefault(QLocale("de_DE"));{CalculatorController c;QApplication::clipboard()->setText("1,5");c.paste();QCOMPARE(c.state().display.primary,L"1,5");}QLocale::setDefault(old);}
+};
+QTEST_MAIN(ControllerTest)
+#include "controller_test.moc"

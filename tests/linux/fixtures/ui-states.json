@@ -1,0 +1,350 @@
+{
+  "provenance": "Direct offline VM captures 2026-10-19. Parent verified all 28 screenshots after waiting for menu-open/menu-closed pixel state. Discarded first timed automation batch: clicks arrived before menus opened. History preference ON throughout matrix.",
+  "rules": {
+    "historyPreferencePersists": true,
+    "panelPersistsAcrossModes": true,
+    "modeChangeClearsPrimary": true,
+    "memoryShared": true,
+    "maximizeEnabled": false,
+    "resizeEnabled": false,
+    "calculatorIndependentOfPanel": true
+  },
+  "matrix": [
+    {
+      "mode": "Standard",
+      "panel": "Basic",
+      "outerSize": [
+        228,
+        422
+      ],
+      "capture": "Standard-Basic-window.png",
+      "modeIndex": 0,
+      "panelIndex": 0,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Standard",
+      "panel": "Units",
+      "outerSize": [
+        602,
+        422
+      ],
+      "capture": "Standard-Units-window.png",
+      "modeIndex": 0,
+      "panelIndex": 1,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Standard",
+      "panel": "Dates",
+      "outerSize": [
+        602,
+        422
+      ],
+      "capture": "Standard-Dates-window.png",
+      "modeIndex": 0,
+      "panelIndex": 2,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Standard",
+      "panel": "Mortgage",
+      "outerSize": [
+        602,
+        422
+      ],
+      "capture": "Standard-Mortgage-window.png",
+      "modeIndex": 0,
+      "panelIndex": 3,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Standard",
+      "panel": "VehicleLease",
+      "outerSize": [
+        602,
+        422
+      ],
+      "capture": "Standard-VehicleLease-window.png",
+      "modeIndex": 0,
+      "panelIndex": 4,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Standard",
+      "panel": "FuelMpg",
+      "outerSize": [
+        602,
+        422
+      ],
+      "capture": "Standard-FuelMpg-window.png",
+      "modeIndex": 0,
+      "panelIndex": 5,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Standard",
+      "panel": "FuelMetric",
+      "outerSize": [
+        602,
+        422
+      ],
+      "capture": "Standard-FuelMetric-window.png",
+      "modeIndex": 0,
+      "panelIndex": 6,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Scientific",
+      "panel": "Basic",
+      "outerSize": [
+        423,
+        422
+      ],
+      "capture": "Scientific-Basic-window.png",
+      "modeIndex": 1,
+      "panelIndex": 0,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Scientific",
+      "panel": "Units",
+      "outerSize": [
+        797,
+        422
+      ],
+      "capture": "Scientific-Units-window.png",
+      "modeIndex": 1,
+      "panelIndex": 1,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Scientific",
+      "panel": "Dates",
+      "outerSize": [
+        797,
+        422
+      ],
+      "capture": "Scientific-Dates-window.png",
+      "modeIndex": 1,
+      "panelIndex": 2,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Scientific",
+      "panel": "Mortgage",
+      "outerSize": [
+        797,
+        422
+      ],
+      "capture": "Scientific-Mortgage-window.png",
+      "modeIndex": 1,
+      "panelIndex": 3,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Scientific",
+      "panel": "VehicleLease",
+      "outerSize": [
+        797,
+        422
+      ],
+      "capture": "Scientific-VehicleLease-window.png",
+      "modeIndex": 1,
+      "panelIndex": 4,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Scientific",
+      "panel": "FuelMpg",
+      "outerSize": [
+        797,
+        422
+      ],
+      "capture": "Scientific-FuelMpg-window.png",
+      "modeIndex": 1,
+      "panelIndex": 5,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Scientific",
+      "panel": "FuelMetric",
+      "outerSize": [
+        797,
+        422
+      ],
+      "capture": "Scientific-FuelMetric-window.png",
+      "modeIndex": 1,
+      "panelIndex": 6,
+      "historyAvailable": true
+    },
+    {
+      "mode": "Programmer",
+      "panel": "Basic",
+      "outerSize": [
+        423,
+        388
+      ],
+      "capture": "Programmer-Basic-window.png",
+      "modeIndex": 2,
+      "panelIndex": 0,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Programmer",
+      "panel": "Units",
+      "outerSize": [
+        797,
+        388
+      ],
+      "capture": "Programmer-Units-window.png",
+      "modeIndex": 2,
+      "panelIndex": 1,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Programmer",
+      "panel": "Dates",
+      "outerSize": [
+        797,
+        388
+      ],
+      "capture": "Programmer-Dates-window.png",
+      "modeIndex": 2,
+      "panelIndex": 2,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Programmer",
+      "panel": "Mortgage",
+      "outerSize": [
+        797,
+        388
+      ],
+      "capture": "Programmer-Mortgage-window.png",
+      "modeIndex": 2,
+      "panelIndex": 3,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Programmer",
+      "panel": "VehicleLease",
+      "outerSize": [
+        797,
+        388
+      ],
+      "capture": "Programmer-VehicleLease-window.png",
+      "modeIndex": 2,
+      "panelIndex": 4,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Programmer",
+      "panel": "FuelMpg",
+      "outerSize": [
+        797,
+        388
+      ],
+      "capture": "Programmer-FuelMpg-window.png",
+      "modeIndex": 2,
+      "panelIndex": 5,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Programmer",
+      "panel": "FuelMetric",
+      "outerSize": [
+        797,
+        388
+      ],
+      "capture": "Programmer-FuelMetric-window.png",
+      "modeIndex": 2,
+      "panelIndex": 6,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Statistics",
+      "panel": "Basic",
+      "outerSize": [
+        228,
+        422
+      ],
+      "capture": "Statistics-Basic-window.png",
+      "modeIndex": 3,
+      "panelIndex": 0,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Statistics",
+      "panel": "Units",
+      "outerSize": [
+        602,
+        422
+      ],
+      "capture": "Statistics-Units-window.png",
+      "modeIndex": 3,
+      "panelIndex": 1,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Statistics",
+      "panel": "Dates",
+      "outerSize": [
+        602,
+        422
+      ],
+      "capture": "Statistics-Dates-window.png",
+      "modeIndex": 3,
+      "panelIndex": 2,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Statistics",
+      "panel": "Mortgage",
+      "outerSize": [
+        602,
+        422
+      ],
+      "capture": "Statistics-Mortgage-window.png",
+      "modeIndex": 3,
+      "panelIndex": 3,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Statistics",
+      "panel": "VehicleLease",
+      "outerSize": [
+        602,
+        422
+      ],
+      "capture": "Statistics-VehicleLease-window.png",
+      "modeIndex": 3,
+      "panelIndex": 4,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Statistics",
+      "panel": "FuelMpg",
+      "outerSize": [
+        602,
+        422
+      ],
+      "capture": "Statistics-FuelMpg-window.png",
+      "modeIndex": 3,
+      "panelIndex": 5,
+      "historyAvailable": false
+    },
+    {
+      "mode": "Statistics",
+      "panel": "FuelMetric",
+      "outerSize": [
+        602,
+        422
+      ],
+      "capture": "Statistics-FuelMetric-window.png",
+      "modeIndex": 3,
+      "panelIndex": 6,
+      "historyAvailable": false
+    }
+  ]
+}

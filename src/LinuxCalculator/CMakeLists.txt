@@ -1,3 +1,4 @@
+set(CMAKE_AUTOMOC ON)
 set(CORE "${PROJECT_SOURCE_DIR}/src/CalcManager")
 set(CORE_SOURCES
   CEngine/Number.cpp CEngine/scicomm.cpp CEngine/calc.cpp CEngine/RationalMath.cpp
@@ -24,3 +25,5 @@ target_compile_options(win7calc_engine PRIVATE -Wall -Wextra -Wno-unused-paramet
 # retain full diagnostics for the new adapter code.
 set_source_files_properties(${CORE_SOURCES} PROPERTIES
   COMPILE_OPTIONS "-Wno-missing-field-initializers;-Wno-sign-compare")
+add_library(win7calc_model STATIC model/CalculatorController.cpp model/CalculatorController.h)
+target_link_libraries(win7calc_model PUBLIC win7calc_engine Qt6::Widgets)
