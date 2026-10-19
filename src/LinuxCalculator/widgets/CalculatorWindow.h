@@ -7,6 +7,7 @@
 #include "Keypad.h"
 #include "ScientificControls.h"
 #include "ProgrammerControls.h"
+#include "StatisticsControls.h"
 namespace Win7Calc {
 class CalculatorWindow final:public QWidget {
  Q_OBJECT
@@ -25,6 +26,7 @@ private:
  Keypad* keypad_;
  ScientificControls* scientific_;
  ProgrammerControls* programmer_;
+ StatisticsControls* statistics_;
  qreal scale_=1;
 };
 }

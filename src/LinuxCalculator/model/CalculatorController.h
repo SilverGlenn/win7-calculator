@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QKeyEvent>
 #include "CalculatorState.h"
+#include "legacy/Statistics.h"
 namespace Win7Calc {
 class CalculatorController final : public QObject {
  Q_OBJECT
@@ -23,10 +24,20 @@ public:
  void cancelHistoryEdit();
  void clearHistory();
  void copyHistory();
+ void addSample();
+ void clearSamples();
+ void selectSample(int);
+ void updateSample(int,const QString&);
+ void computeStatistic(Statistic);
+ void copySamples();
+ void pasteSamples();
 private:
  void refresh();
  Engine engine_;
  CalculatorState state_;
+ std::vector<CalcEngine::Rational> samples_;
+ std::wstring statisticNotice_;
+ void syncSamples();
 signals:
  void stateChanged();
  void invalidInput(const QString&);

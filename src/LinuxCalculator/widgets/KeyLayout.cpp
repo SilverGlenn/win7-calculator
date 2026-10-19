@@ -13,6 +13,25 @@ QRect scaledRect(QRect r,qreal s) {
  return {qRound(r.x()*s),qRound(r.y()*s),qRound((r.x()+r.width())*s)-qRound(r.x()*s),qRound((r.y()+r.height())*s)-qRound(r.y()*s)};
 }
 std::vector<KeySpec> keyLayout(Mode mode,bool inverse) {
+ if(mode==Mode::Statistics){
+  auto normal=keyLayout(Mode::Standard,false);std::vector<KeySpec> result;
+  for(auto k:normal)if(k.id.startsWith("memory-")||k.id.startsWith("digit-")||k.id=="backspace"||k.id=="clear"||k.id=="decimal"){k.rect.translate(0,100);result.push_back(k);}
+  auto add=[&](QString id,QString text,QString name,int col,int row,std::optional<C> command={},std::optional<Statistic> statistic={}){
+   const int xs[]={11,50,89,128,167};KeySpec k{id,text,name,QRect(xs[col],185+32*row,col?34:33,27),command};k.statistic=statistic;result.push_back(k);
+  };
+  add("samples-clear","CAD","Clear all data",1,1);
+  add("scientific-format","F-E","Scientific notation",3,1,C::CommandFE);
+  add("exponent","Exp","Enter exponent",4,1,C::CommandEXP);
+  add("stat-mean","x̄","Mean",3,2,{},Statistic::Mean);
+  add("stat-mean-square","x̄²","Mean of squares",4,2,{},Statistic::MeanSquare);
+  add("stat-sum","∑x","Sum",3,3,{},Statistic::Sum);
+  add("stat-sum-square","∑x²","Sum of squares",4,3,{},Statistic::SumSquare);
+  add("stat-population-deviation","σₙ","Population standard deviation",3,4,{},Statistic::PopulationDeviation);
+  add("stat-sample-deviation","σₙ₋₁","Sample standard deviation",4,4,{},Statistic::SampleDeviation);
+  add("negate","±","Change sign",3,5,C::CommandSIGN);
+  add("sample-add","Add","Add data",4,5);
+  return result;
+ }
  if(mode==Mode::Programmer){
   auto result=keyLayout(Mode::Standard,false);
   for(auto&k:result){

@@ -4,12 +4,10 @@
 #include <cwctype>
 #include <limits>
 namespace Win7Calc {
-namespace {
-void ensureNumericRuntime() {
+void initializeNumericRuntime() {
     // The retained library owns process-global constants. All public operations
     // run on the owning thread, including helpers used without a GUI Engine.
     if (rat_one == nullptr) ChangeConstants(10, 32);
-}
 }
 NumericResult parseDecimal(std::wstring_view text, NumericLocale locale) {
     auto invalid = [] { return NumericResult{std::nullopt, NumericError::InvalidInput}; };
@@ -53,7 +51,7 @@ NumericResult parseDecimal(std::wstring_view text, NumericLocale locale) {
     exponent -= fractionDigits;
     if (exponent < -9999 || exponent > 9999) return invalid();
     try {
-        ensureNumericRuntime();
+        initializeNumericRuntime();
         // Integer mantissa means this path never changes RatPack's global
         // decimal separator while another engine owns the active locale.
         PRAT raw = StringToRat(negative, digits, exponent < 0, std::to_wstring(std::abs(exponent)), 10, CalcEngine::RATIONAL_PRECISION);
@@ -64,7 +62,7 @@ NumericResult parseDecimal(std::wstring_view text, NumericLocale locale) {
     } catch (uint32_t) { return {std::nullopt, NumericError::Overflow}; }
 }
 std::wstring formatDecimal(const CalcEngine::Rational& value, NumericLocale locale, int significantDigits) {
-    ensureNumericRuntime();
+    initializeNumericRuntime();
     auto text = value.ToString(10, NumberFormat::Float, significantDigits);
     for (auto& ch : text) if (ch == L'.' || ch == L',') ch = locale.decimal;
     return text;

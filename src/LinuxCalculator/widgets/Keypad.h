@@ -14,5 +14,6 @@ private:
  std::vector<CalculatorKey*> keys_;
  Mode mode_=Mode::Statistics;
  bool inverse_=false;
+ bool initialized_=false;
 };
 }

@@ -19,13 +19,13 @@
 static void initializeCalculatorResources() { Q_INIT_RESOURCE(resources); }
 namespace Win7Calc {
 CalculatorWindow::CalculatorWindow(CalculatorController& c,QWidget* p)
- :QWidget(p),controller_(c),menus_(new QMenuBar(this)),display_(new CalculatorDisplay(this)),keypad_(new Keypad(c,this)),scientific_(new ScientificControls(c,keypad_)),programmer_(new ProgrammerControls(c,keypad_)){
+ :QWidget(p),controller_(c),menus_(new QMenuBar(this)),display_(new CalculatorDisplay(this)),keypad_(new Keypad(c,this)),scientific_(new ScientificControls(c,keypad_)),programmer_(new ProgrammerControls(c,keypad_)),statistics_(new StatisticsControls(c,this)){
  initializeCalculatorResources();
  setObjectName("calculator-window");setWindowTitle(tr("Calculator"));
  setWindowIcon(QIcon::fromTheme("accessories-calculator",QIcon(":/icons/calculator.svg")));
  setFocusPolicy(Qt::StrongFocus);
  scale_=LegacyMetrics::fontScale(font());
- buildMenus();menus_->raise();display_->raise();
+ buildMenus();menus_->raise();display_->raise();statistics_->raise();
  connect(&controller_,&CalculatorController::stateChanged,this,&CalculatorWindow::refresh);
  connect(&controller_,&CalculatorController::invalidInput,this,[]{QApplication::beep();});
  connect(QApplication::clipboard(),&QClipboard::dataChanged,this,[this]{findChild<QAction*>("paste")->setEnabled(!QApplication::clipboard()->text().isEmpty());});
@@ -37,7 +37,7 @@ void CalculatorWindow::buildMenus(){
  auto* view=menus_->addMenu(tr("&View"));auto* modeGroup=new QActionGroup(this);
  const QStringList modes={tr("&Standard"),tr("S&cientific"),tr("&Programmer"),tr("S&tatistics")};
  for(int i=0;i<modes.size();++i){
-  auto* a=view->addAction(modes[i]);a->setObjectName(QString("mode-%1").arg(i));a->setCheckable(true);a->setChecked(i==0);a->setShortcut(QKeySequence(QString("Alt+%1").arg(i+1)));a->setEnabled(i<3);modeGroup->addAction(a);
+  auto* a=view->addAction(modes[i]);a->setObjectName(QString("mode-%1").arg(i));a->setCheckable(true);a->setChecked(i==0);a->setShortcut(QKeySequence(QString("Alt+%1").arg(i+1)));a->setEnabled(true);modeGroup->addAction(a);
   connect(a,&QAction::triggered,this,[this,i]{controller_.setMode(static_cast<Mode>(i));});
  }
  view->addSeparator();
@@ -67,7 +67,7 @@ void CalculatorWindow::refresh(){
  int baseWidth=(state.mode==Mode::Scientific||state.mode==Mode::Programmer)?407:212;
  int dh=state.mode==Mode::Statistics||(state.historyVisible&&controller_.historyAvailable())?150:50;
  display_->setGeometry(scaledRect(QRect(11,30,baseWidth-22,dh),scale_));
- display_->setState(state.display,scale_);
+ display_->setState(state.display,scale_);statistics_->sync(state,scale_);
  findChild<QAction*>("digit-grouping")->setChecked(state.digitGrouping);
  findChild<QAction*>("history-toggle")->setChecked(state.historyVisible);
  update();

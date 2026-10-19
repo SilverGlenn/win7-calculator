@@ -25,12 +25,14 @@ target_compile_options(win7calc_engine PRIVATE -Wall -Wextra -Wno-unused-paramet
 # retain full diagnostics for the new adapter code.
 set_source_files_properties(${CORE_SOURCES} PROPERTIES
   COMPILE_OPTIONS "-Wno-missing-field-initializers;-Wno-sign-compare")
+add_library(win7calc_legacy STATIC legacy/Statistics.cpp)
+target_link_libraries(win7calc_legacy PUBLIC win7calc_engine)
 add_library(win7calc_model STATIC model/CalculatorController.cpp model/CalculatorController.h)
-target_link_libraries(win7calc_model PUBLIC win7calc_engine Qt6::Widgets)
+target_link_libraries(win7calc_model PUBLIC win7calc_legacy Qt6::Widgets)
 add_library(win7calc_widgets STATIC
  widgets/KeyLayout.cpp widgets/CalculatorWindow.cpp widgets/CalculatorWindow.h
  widgets/CalculatorKey.cpp widgets/CalculatorKey.h widgets/CalculatorDisplay.cpp widgets/CalculatorDisplay.h
- widgets/Keypad.cpp widgets/Keypad.h widgets/ScientificControls.cpp widgets/ScientificControls.h widgets/ProgrammerControls.cpp widgets/ProgrammerControls.h)
+ widgets/Keypad.cpp widgets/Keypad.h widgets/ScientificControls.cpp widgets/ScientificControls.h widgets/ProgrammerControls.cpp widgets/ProgrammerControls.h widgets/StatisticsControls.cpp widgets/StatisticsControls.h)
 target_link_libraries(win7calc_widgets PUBLIC win7calc_model)
 qt_add_resources(CALCULATOR_RESOURCES resources.qrc)
 target_sources(win7calc_widgets PRIVATE ${CALCULATOR_RESOURCES})

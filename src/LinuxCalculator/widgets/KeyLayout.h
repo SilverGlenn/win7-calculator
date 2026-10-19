@@ -5,6 +5,7 @@
 #include <QString>
 #include <optional>
 #include "model/CalculatorState.h"
+#include "legacy/Statistics.h"
 namespace Win7Calc {
 enum class KeyAppearance { Number, Operator, Memory };
 struct KeySpec {
@@ -14,6 +15,7 @@ struct KeySpec {
  KeyAppearance appearance = KeyAppearance::Operator;
  bool enabled=true, checkable=false, checked=false;
  int fontPixels=0;
+ std::optional<Statistic> statistic;
 };
 QSize clientSize(Mode,Panel,bool historyVisible,qreal logicalScale=1);
 QRect scaledRect(QRect,qreal);

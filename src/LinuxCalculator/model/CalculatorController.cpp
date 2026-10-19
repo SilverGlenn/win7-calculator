@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QLocale>
+#include <QRegularExpression>
 #include <optional>
 
 namespace Win7Calc {
@@ -19,12 +20,66 @@ CalculatorController::CalculatorController(QObject* parent)
     : QObject(parent), engine_(currentNumericLocale()) {
     state_.display = engine_.state();
 }
+void CalculatorController::syncSamples() {
+    state_.samples.clear();
+    for(const auto&value:samples_)state_.samples.push_back(formatDecimal(value,currentNumericLocale(),16));
+}
+void CalculatorController::addSample() {
+    if(state_.mode!=Mode::Statistics||engine_.state().error)return;
+    statisticNotice_.clear();samples_.push_back(engine_.value());syncSamples();
+    state_.selectedSample=static_cast<int>(samples_.size())-1;
+    engine_.send(Command::CommandCENTR);refresh();
+}
+void CalculatorController::clearSamples() {
+    samples_.clear();syncSamples();state_.selectedSample=-1;statisticNotice_.clear();
+    engine_.send(Command::CommandCLEAR);refresh();
+}
+void CalculatorController::selectSample(int index) {
+    if(index<0||index>=static_cast<int>(samples_.size()))return;
+    state_.selectedSample=index;refresh();
+}
+void CalculatorController::updateSample(int index,const QString& text) {
+    if(index<0||index>=static_cast<int>(samples_.size()))return;
+    const auto parsed=parseDecimal(text.toStdWString(),currentNumericLocale());
+    if(!parsed.value){emit invalidInput(tr("Invalid input"));refresh();return;}
+    samples_[index]=*parsed.value;syncSamples();refresh();
+}
+void CalculatorController::computeStatistic(Statistic statistic) {
+    if(state_.mode!=Mode::Statistics||engine_.state().error)return;
+    const auto result=calculateStatistic(samples_,statistic);statisticNotice_.clear();
+    if(result.value)engine_.setValue(*result.value);
+    else statisticNotice_=result.error==NumericError::InsufficientData?L"Enter data to calculate":result.error==NumericError::Overflow?L"Overflow":L"Invalid input";
+    refresh();
+}
+void CalculatorController::copySamples() {
+    const auto index=state_.selectedSample;
+    if(index>=0&&index<static_cast<int>(state_.samples.size()))
+        QApplication::clipboard()->setText(QString::fromStdWString(state_.samples[index]));
+}
+void CalculatorController::pasteSamples() {
+    const auto text=QApplication::clipboard()->text();
+    if(text.isEmpty()||text.size()>4096){emit invalidInput(tr("Invalid input"));return;}
+    std::vector<CalcEngine::Rational> pending;
+    for(const auto&line:text.split(QRegularExpression("[\\r\\n]+"),Qt::SkipEmptyParts)){
+        const auto parsed=parseDecimal(line.toStdWString(),currentNumericLocale());
+        if(!parsed.value){emit invalidInput(tr("Invalid input"));return;}
+        pending.push_back(*parsed.value);
+    }
+    if(pending.empty()){emit invalidInput(tr("Invalid input"));return;}
+    samples_.insert(samples_.end(),pending.begin(),pending.end());syncSamples();
+    state_.selectedSample=static_cast<int>(samples_.size())-1;statisticNotice_.clear();
+    engine_.send(Command::CommandCENTR);refresh();
+}
 bool CalculatorController::historyAvailable() const {
     return state_.mode == Mode::Standard || state_.mode == Mode::Scientific;
 }
 void CalculatorController::refresh() {
     state_.display = engine_.state();
     if (!historyAvailable()) state_.display.history.clear();
+    if(state_.mode==Mode::Statistics){
+        state_.display.expression.clear();
+        if(!statisticNotice_.empty()){state_.display.primary=statisticNotice_;state_.display.notice=true;}
+    }
     if (state_.mode == Mode::Programmer && !state_.display.error) {
         const auto mask = state_.wordBits == 64 ? UINT64_MAX : ((std::uint64_t{1} << state_.wordBits) - 1);
         state_.bitPattern = engine_.value().ToUInt64_t() & mask;
@@ -35,6 +90,8 @@ void CalculatorController::setMode(Mode mode) {
     if (state_.mode == mode) return;
     state_.mode = mode;
     state_.inverse = false;
+    statisticNotice_.clear();
+    if(mode==Mode::Statistics)state_.selectedSample=static_cast<int>(samples_.size())-1;
     engine_.setMode(mode == Mode::Statistics ? Mode::Standard : mode);
     state_.angle = AngleUnit::Degrees;
     if (mode == Mode::Scientific) engine_.send(Command::CommandDEG);
@@ -57,6 +114,7 @@ void CalculatorController::setDigitGrouping(bool grouping) {
     refresh();
 }
 void CalculatorController::send(Command command) {
+    statisticNotice_.clear();
     engine_.send(command);
     if (!engine_.state().error) switch(command) {
     case Command::CommandHex: state_.radix=16; break;

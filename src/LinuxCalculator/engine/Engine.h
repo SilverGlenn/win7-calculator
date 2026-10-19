@@ -8,7 +8,7 @@
 namespace Win7Calc {
 enum class Mode { Standard, Scientific, Programmer, Statistics };
 struct HistoryEntry { std::wstring expression, result; std::vector<std::shared_ptr<IExpressionCommand>> commands; };
-struct DisplayState { std::wstring primary = L"0", expression; bool error = false, memory = false; std::vector<HistoryEntry> history; };
+struct DisplayState { std::wstring primary = L"0", expression; bool error = false, memory = false, notice = false; std::vector<HistoryEntry> history; };
 class Engine {
 public:
   explicit Engine(NumericLocale locale = {});

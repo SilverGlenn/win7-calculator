@@ -216,5 +216,30 @@
       "wordBits": 8,
       "primary": "0"
     }
+  },
+  "statistics": {
+    "provenance": "Direct mouse-driven VM captures 2026-10-19 under docs/reference/windows7-calculator/statistics; inconclusive clipboard round-trip excluded.",
+    "samples": [
+      "1",
+      "2",
+      "3"
+    ],
+    "results": {
+      "mean": "2",
+      "meanSquare": "4.666666666666667",
+      "sum": "6",
+      "sumSquare": "14",
+      "populationDeviation": "0.816496580927726",
+      "sampleDeviation": "1"
+    },
+    "emptyNotice": "Enter data to calculate",
+    "singlePopulationDeviation": "0",
+    "singleSampleNotice": "Enter data to calculate",
+    "addResetsPrimary": "0",
+    "cadClearsDataset": true,
+    "modeSwitchPreservesDataset": true,
+    "selectionRecallsValue": false,
+    "doubleClickEditsSample": true,
+    "clipboardSemanticsVerified": false
   }
 }

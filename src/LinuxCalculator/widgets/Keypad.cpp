@@ -3,11 +3,15 @@
 namespace Win7Calc {
 Keypad::Keypad(CalculatorController& c,QWidget* p):QWidget(p),controller_(c){setObjectName("keypad");}
 void Keypad::sync(const CalculatorState& state,qreal scale) {
- if(mode_!=state.mode){
+ if(!initialized_||mode_!=state.mode){
+  initialized_=true;
   for(auto* k:keys_)delete k;keys_.clear();mode_=state.mode;inverse_=state.inverse;
   for(const auto& spec:keyLayout(mode_,inverse_)){
    auto* key=new CalculatorKey(spec,this);keys_.push_back(key);
    if(spec.command)connect(key,&QAbstractButton::clicked,this,[this,cmd=*spec.command]{controller_.send(cmd);});
+   else if(spec.statistic)connect(key,&QAbstractButton::clicked,this,[this,stat=*spec.statistic]{controller_.computeStatistic(stat);});
+   else if(spec.id=="sample-add")connect(key,&QAbstractButton::clicked,&controller_,&CalculatorController::addSample);
+   else if(spec.id=="samples-clear")connect(key,&QAbstractButton::clicked,&controller_,&CalculatorController::clearSamples);
    key->show();
   }
  }

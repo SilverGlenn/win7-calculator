@@ -29,9 +29,18 @@ This report records implementation evidence, **not final fidelity acceptance**.
 - ASan/UBSan found signed negation overflow in retained `i32tonum(INT32_MIN)`. A dedicated minimum-signed-integer regression reproduced the sanitizer failure; unsigned magnitude arithmetic fixed it while preserving the sign. Programmer width/shift tests subsequently passed ASan/UBSan with `halt_on_error=1`. Leak detection was disabled for this arithmetic/UI sanitizer pass; it is not a leak audit.
 - The display still uses a Consolas fallback and full visual calibration is pending.
 
+## 2026-10-19: Statistics mode (Task 6)
+
+- Full current suite: nine CTest processes pass. Aggregates, population/sample deviation, large-offset stability, empty/single sample behavior, Add/CAD, memory/Exp input, dataset persistence, inline editing and validated clipboard parsing are exercised.
+- Original Add resets primary to zero; C/backspace do not remove samples. Original data selection does not recall a value. Arrow controls change selection; double-click opens inline editing. Re-entry preserves data, selects its last row and resets primary.
+- “Enter data to calculate” is an informational notice, not an arithmetic lockout. Singleton population deviation is zero; singleton sample deviation shows that notice.
+- Native Wayland screenshots: [populated](images/statistics-task6.png), [empty](images/statistics-empty-task6.png), [notice](images/statistics-notice-task6.png). Notice/result font calibration remains visibly incomplete.
+- Inline edit commits through Qt's queued delegate event; the test awaits the committed model value. A preset-Statistics constructor regression also fixed a previously hidden keypad initialization-sentinel collision.
+- Dataset context Copy currently copies selected sample text, and Paste validates all newline-delimited values before changing data. Those actions exist in the original UI, but the guest clipboard round-trip probe was inconclusive: exact original clipboard serialization/selection behavior remains an explicit parity check, not a verified claim.
+
 ## Known incomplete work / visual differences
 
-- Statistics, history and supplementary actions are intentionally disabled in this intermediate Standard/Scientific/Programmer executable; remaining plan tasks implement them. The shared engine/controller supports later integration.
+- History and supplementary actions are intentionally disabled in this intermediate four-mode executable; remaining plan tasks implement them. The shared engine/controller supports later integration.
 - Segoe UI resolves correctly, but **Consolas is not installed**: Qt resolves that request to DejaVu Sans Mono. Result/expression glyphs therefore differ from Windows. No Microsoft font was copied/bundled or global font configuration changed. This must remain visible in the final differences report until resolved.
 - Initial native focus rectangle and menu-mnemonic visibility differ from the clean original baseline; keyboard/mouse focus-state calibration remains in Task 11.
 - Gradient, glyph and popup-menu calibration is not complete. Correct dimensions and passing input tests are not a pixel-perfect claim.

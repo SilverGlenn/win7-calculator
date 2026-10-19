@@ -10,6 +10,8 @@ struct CalculatorState {
  AngleUnit angle = AngleUnit::Degrees;
  int radix=10, wordBits=64;
  std::uint64_t bitPattern=0;
+ std::vector<std::wstring> samples;
+ int selectedSample=-1;
  // Original View checkbox preference persists while unavailable in other modes.
  bool historyVisible = false, digitGrouping = false, inverse = false;
  DisplayState display;
