@@ -12,9 +12,14 @@ void Keypad::sync(const CalculatorState& state,qreal scale) {
   }
  }
  inverse_=state.inverse;
- const auto layout=keyLayout(mode_,inverse_);
+ auto layout=keyLayout(mode_,inverse_);
  const int dy=state.historyVisible&&(mode_==Mode::Standard||mode_==Mode::Scientific)?100:0;
  for(std::size_t i=0;i<keys_.size();++i){
+  if(state.mode==Mode::Programmer&&layout[i].command){
+   const int digit=static_cast<int>(*layout[i].command)-130;
+   if(digit>=0&&digit<16)layout[i].enabled=digit<state.radix;
+  }
+  if(state.display.error&&layout[i].id!="clear"&&layout[i].id!="clear-entry")layout[i].enabled=false;
   keys_[i]->setSpec(layout[i]);
   keys_[i]->setGeometry(scaledRect(layout[i].rect.translated(0,dy),scale));
   keys_[i]->setLogicalScale(scale);

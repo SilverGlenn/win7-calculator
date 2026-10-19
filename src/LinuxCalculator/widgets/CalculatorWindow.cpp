@@ -19,7 +19,7 @@
 static void initializeCalculatorResources() { Q_INIT_RESOURCE(resources); }
 namespace Win7Calc {
 CalculatorWindow::CalculatorWindow(CalculatorController& c,QWidget* p)
- :QWidget(p),controller_(c),menus_(new QMenuBar(this)),display_(new CalculatorDisplay(this)),keypad_(new Keypad(c,this)),scientific_(new ScientificControls(c,keypad_)){
+ :QWidget(p),controller_(c),menus_(new QMenuBar(this)),display_(new CalculatorDisplay(this)),keypad_(new Keypad(c,this)),scientific_(new ScientificControls(c,keypad_)),programmer_(new ProgrammerControls(c,keypad_)){
  initializeCalculatorResources();
  setObjectName("calculator-window");setWindowTitle(tr("Calculator"));
  setWindowIcon(QIcon::fromTheme("accessories-calculator",QIcon(":/icons/calculator.svg")));
@@ -37,7 +37,7 @@ void CalculatorWindow::buildMenus(){
  auto* view=menus_->addMenu(tr("&View"));auto* modeGroup=new QActionGroup(this);
  const QStringList modes={tr("&Standard"),tr("S&cientific"),tr("&Programmer"),tr("S&tatistics")};
  for(int i=0;i<modes.size();++i){
-  auto* a=view->addAction(modes[i]);a->setObjectName(QString("mode-%1").arg(i));a->setCheckable(true);a->setChecked(i==0);a->setShortcut(QKeySequence(QString("Alt+%1").arg(i+1)));a->setEnabled(i<2);modeGroup->addAction(a);
+  auto* a=view->addAction(modes[i]);a->setObjectName(QString("mode-%1").arg(i));a->setCheckable(true);a->setChecked(i==0);a->setShortcut(QKeySequence(QString("Alt+%1").arg(i+1)));a->setEnabled(i<3);modeGroup->addAction(a);
   connect(a,&QAction::triggered,this,[this,i]{controller_.setMode(static_cast<Mode>(i));});
  }
  view->addSeparator();
@@ -62,7 +62,7 @@ void CalculatorWindow::refresh(){
  const auto& state=controller_.state();
  setFixedSize(clientSize(state.mode,state.panel,state.historyVisible,scale_));
  menus_->setGeometry(0,0,width(),qRound(19*scale_));
- keypad_->setGeometry(rect());keypad_->sync(state,scale_);scientific_->sync(state,scale_);
+ keypad_->setGeometry(rect());keypad_->sync(state,scale_);scientific_->sync(state,scale_);programmer_->sync(state,scale_);
  for(int i=0;i<4;++i)findChild<QAction*>(QString("mode-%1").arg(i))->setChecked(i==static_cast<int>(state.mode));
  int baseWidth=(state.mode==Mode::Scientific||state.mode==Mode::Programmer)?407:212;
  int dh=state.mode==Mode::Statistics||(state.historyVisible&&controller_.historyAvailable())?150:50;

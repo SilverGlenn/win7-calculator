@@ -25,6 +25,10 @@ bool CalculatorController::historyAvailable() const {
 void CalculatorController::refresh() {
     state_.display = engine_.state();
     if (!historyAvailable()) state_.display.history.clear();
+    if (state_.mode == Mode::Programmer && !state_.display.error) {
+        const auto mask = state_.wordBits == 64 ? UINT64_MAX : ((std::uint64_t{1} << state_.wordBits) - 1);
+        state_.bitPattern = engine_.value().ToUInt64_t() & mask;
+    }
     emit stateChanged();
 }
 void CalculatorController::setMode(Mode mode) {
@@ -34,6 +38,7 @@ void CalculatorController::setMode(Mode mode) {
     engine_.setMode(mode == Mode::Statistics ? Mode::Standard : mode);
     state_.angle = AngleUnit::Degrees;
     if (mode == Mode::Scientific) engine_.send(Command::CommandDEG);
+    if (mode == Mode::Programmer) state_.radix = 10;
     refresh();
 }
 void CalculatorController::setPanel(Panel panel) {
@@ -53,6 +58,17 @@ void CalculatorController::setDigitGrouping(bool grouping) {
 }
 void CalculatorController::send(Command command) {
     engine_.send(command);
+    if (!engine_.state().error) switch(command) {
+    case Command::CommandHex: state_.radix=16; break;
+    case Command::CommandDec: state_.radix=10; break;
+    case Command::CommandOct: state_.radix=8; break;
+    case Command::CommandBin: state_.radix=2; break;
+    case Command::CommandQword: state_.wordBits=64; break;
+    case Command::CommandDword: state_.wordBits=32; break;
+    case Command::CommandWord: state_.wordBits=16; break;
+    case Command::CommandByte: state_.wordBits=8; break;
+    default: break;
+    }
     if (command == Command::CommandINV) state_.inverse = !state_.inverse;
     if (command == Command::CommandDEG) state_.angle = AngleUnit::Degrees;
     if (command == Command::CommandRAD) state_.angle = AngleUnit::Radians;

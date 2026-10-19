@@ -146,5 +146,75 @@
       "factorial"
     ],
     "modeEntryResetsAngleToDegrees": true
+  },
+  "programmer": {
+    "provenance": "Direct mouse-driven Windows7 VM captures 2026-10-19, docs/reference/windows7-calculator/programmer/.",
+    "cases": [
+      {
+        "id": "byte-not-dec",
+        "result": "-1"
+      },
+      {
+        "id": "byte-not-hex",
+        "result": "FF"
+      },
+      {
+        "id": "byte-not-oct",
+        "result": "377"
+      },
+      {
+        "id": "byte-not-bin",
+        "result": "11111111"
+      },
+      {
+        "id": "byte-high-bit",
+        "result": "-128"
+      },
+      {
+        "id": "word-high-bit",
+        "result": "-32768"
+      },
+      {
+        "id": "dword-high-bit",
+        "result": "-2147483648"
+      },
+      {
+        "id": "qword-high-bit",
+        "result": "-9223372036854775808"
+      },
+      {
+        "id": "narrow-hex",
+        "result": "34"
+      },
+      {
+        "id": "sign-extend",
+        "result": "FFFFFF80"
+      },
+      {
+        "id": "byte-rotate-left",
+        "result": "2"
+      },
+      {
+        "id": "byte-rotate-right",
+        "result": "-128"
+      },
+      {
+        "id": "byte-right-shift",
+        "result": "-64"
+      },
+      {
+        "id": "byte-left-shift-seven",
+        "result": "-128"
+      },
+      {
+        "id": "byte-left-shift-eight",
+        "result": "Result not defined"
+      }
+    ],
+    "reentry": {
+      "radix": 10,
+      "wordBits": 8,
+      "primary": "0"
+    }
   }
 }

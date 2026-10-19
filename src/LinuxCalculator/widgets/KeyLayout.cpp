@@ -13,6 +13,32 @@ QRect scaledRect(QRect r,qreal s) {
  return {qRound(r.x()*s),qRound(r.y()*s),qRound((r.x()+r.width())*s)-qRound(r.x()*s),qRound((r.y()+r.height())*s)-qRound(r.y()*s)};
 }
 std::vector<KeySpec> keyLayout(Mode mode,bool inverse) {
+ if(mode==Mode::Programmer){
+  auto result=keyLayout(Mode::Standard,false);
+  for(auto&k:result){
+   k.rect.translate(195,66);
+   if(k.id=="decimal"||k.id=="percent"||k.id=="square-root"||k.id=="reciprocal")k.enabled=false;
+  }
+  auto add=[&](QString id,QString text,QString name,int col,int row,C cmd){
+   const int xs[]={89,128,167};
+   result.push_back({id,text,name,QRect(xs[col],151+row*32,34,27),cmd});
+  };
+  KeySpec blank{"programmer-blank","","",QRect(89,151,34,27),std::nullopt,KeyAppearance::Memory};
+  blank.enabled=false;result.push_back(blank);
+  add("modulo","Mod","Modulo",1,0,C::CommandMOD);
+  add("open-parenthesis","(","Open parenthesis",0,1,C::CommandOPENP);
+  add("close-parenthesis",")","Close parenthesis",1,1,C::CommandCLOSEP);
+  add("rotate-left","RoL","Rotate left",0,2,C::CommandROL);
+  add("rotate-right","RoR","Rotate right",1,2,C::CommandROR);
+  add("bit-or","Or","Bitwise OR",0,3,C::CommandOR);
+  add("bit-xor","Xor","Bitwise XOR",1,3,C::CommandXor);
+  add("shift-left","Lsh","Shift left",0,4,C::CommandLSHF);
+  add("shift-right","Rsh","Arithmetic shift right",1,4,C::CommandRSHF);
+  add("bit-not","Not","Bitwise NOT",0,5,C::CommandNot);
+  add("bit-and","And","Bitwise AND",1,5,C::CommandAnd);
+  for(int i=0;i<6;++i){QString ch(QChar('A'+i));add("hex-"+ch,ch,ch,2,i,static_cast<C>(140+i));result.back().appearance=KeyAppearance::Memory;result.back().fontPixels=14;}
+  return result;
+ }
  if(mode==Mode::Scientific){
   auto result=keyLayout(Mode::Standard,false);
   for(auto& k:result)k.rect.translate(195,0);

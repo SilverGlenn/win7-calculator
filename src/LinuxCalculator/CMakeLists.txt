@@ -30,7 +30,7 @@ target_link_libraries(win7calc_model PUBLIC win7calc_engine Qt6::Widgets)
 add_library(win7calc_widgets STATIC
  widgets/KeyLayout.cpp widgets/CalculatorWindow.cpp widgets/CalculatorWindow.h
  widgets/CalculatorKey.cpp widgets/CalculatorKey.h widgets/CalculatorDisplay.cpp widgets/CalculatorDisplay.h
- widgets/Keypad.cpp widgets/Keypad.h widgets/ScientificControls.cpp widgets/ScientificControls.h)
+ widgets/Keypad.cpp widgets/Keypad.h widgets/ScientificControls.cpp widgets/ScientificControls.h widgets/ProgrammerControls.cpp widgets/ProgrammerControls.h)
 target_link_libraries(win7calc_widgets PUBLIC win7calc_model)
 qt_add_resources(CALCULATOR_RESOURCES resources.qrc)
 target_sources(win7calc_widgets PRIVATE ${CALCULATOR_RESOURCES})

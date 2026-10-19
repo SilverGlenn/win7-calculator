@@ -812,22 +812,17 @@ PNUMBER i32tonum(int32_t ini32, uint32_t radix)
     pmant = pnumret->mant;
     pnumret->cdigit = 0;
     pnumret->exp = 0;
-    if (ini32 < 0)
-    {
-        pnumret->sign = -1;
-        ini32 *= -1;
-    }
-    else
-    {
-        pnumret->sign = 1;
-    }
+    pnumret->sign = ini32 < 0 ? -1 : 1;
+    // Form the magnitude in unsigned arithmetic: negating INT32_MIN as an
+    // int32_t is undefined (and is exercised by internal-base conversion).
+    uint32_t magnitude = ini32 < 0 ? uint32_t{ 0 } - static_cast<uint32_t>(ini32) : static_cast<uint32_t>(ini32);
 
     do
     {
-        *pmant++ = (MANTTYPE)(ini32 % radix);
-        ini32 /= radix;
+        *pmant++ = (MANTTYPE)(magnitude % radix);
+        magnitude /= radix;
         pnumret->cdigit++;
-    } while (ini32);
+    } while (magnitude);
 
     return (pnumret);
 }

@@ -1,4 +1,5 @@
 #include <QtTest>
+#include <limits>
 #include "engine/Engine.h"
 #include "engine/Numeric.h"
 using namespace Win7Calc;
@@ -6,6 +7,7 @@ static bool commaLocale=false;
 class NumericTest : public QObject {
  Q_OBJECT
 private slots:
+ void minimumSignedInteger() {auto n=CalcEngine::Rational(std::numeric_limits<int32_t>::min());QCOMPARE(formatDecimal(n),L"-2147483648");}
  void standaloneParsing() {auto n=parseDecimal(L"0.1"),m=parseDecimal(L"0.2");QVERIFY(n.value&&m.value);QCOMPARE(formatDecimal(*n.value+*m.value),L"0.3");}
  void exactDecimal() {Engine init;auto a=parseDecimal(L"0.1"),b=parseDecimal(L"0.2"),c=parseDecimal(L"0.3");QVERIFY(a.value&&b.value&&c.value);QVERIFY(*a.value+*b.value==*c.value);QCOMPARE(formatDecimal(*c.value),L"0.3");}
  void rejectMalformed() {Engine init;for(auto text:{L"",L"12foo",L"1+2",L"NaN",L"1e999999",L"1..2",L"1,2,3"})QVERIFY(!parseDecimal(text).value);QVERIFY(!parseDecimal(std::wstring(4097,L'9')).value);}

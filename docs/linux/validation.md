@@ -21,9 +21,17 @@ This report records implementation evidence, **not final fidelity acceptance**.
 - Native screenshot inspection caught a clipped Grads label from Kvantum's larger radio spacing. The native caption-size regression failed before local indicator/spacing calibration and passed afterward; no global style setting was changed.
 - The earlier persistent preview process remains the Task 3 build until reopened; test-created Scientific windows validate the newer binary without forcibly closing a window the operator may be using.
 
+## 2026-10-19: Programmer mode (Task 5)
+
+- Full current suite: eight CTest processes pass. Direct VM captures cover all four bases/widths, NOT, highest bits 7/15/31/63, narrowing, sign extension, rotations, arithmetic right shift and the too-large shift error.
+- Original Programmer re-entry resets the radix to Dec but **preserves word width**. Width-limited bit rows are hidden, not filled with gray higher bits. The model/UI follow this observed behavior.
+- [Native high-bit screenshot](images/programmer-high-bit-task5.png). Native QWindow-level mouse hit testing proves the shaped bit/radio control overlay does not block numeric keys beneath it.
+- ASan/UBSan found signed negation overflow in retained `i32tonum(INT32_MIN)`. A dedicated minimum-signed-integer regression reproduced the sanitizer failure; unsigned magnitude arithmetic fixed it while preserving the sign. Programmer width/shift tests subsequently passed ASan/UBSan with `halt_on_error=1`. Leak detection was disabled for this arithmetic/UI sanitizer pass; it is not a leak audit.
+- The display still uses a Consolas fallback and full visual calibration is pending.
+
 ## Known incomplete work / visual differences
 
-- Programmer, Statistics, history and supplementary actions are intentionally disabled in this intermediate Standard/Scientific executable; remaining plan tasks implement them. The shared engine/controller supports later integration.
+- Statistics, history and supplementary actions are intentionally disabled in this intermediate Standard/Scientific/Programmer executable; remaining plan tasks implement them. The shared engine/controller supports later integration.
 - Segoe UI resolves correctly, but **Consolas is not installed**: Qt resolves that request to DejaVu Sans Mono. Result/expression glyphs therefore differ from Windows. No Microsoft font was copied/bundled or global font configuration changed. This must remain visible in the final differences report until resolved.
 - Initial native focus rectangle and menu-mnemonic visibility differ from the clean original baseline; keyboard/mouse focus-state calibration remains in Task 11.
 - Gradient, glyph and popup-menu calibration is not complete. Correct dimensions and passing input tests are not a pixel-perfect claim.
