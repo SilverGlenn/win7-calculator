@@ -75,6 +75,10 @@ public:
     {
         return m_bRecord;
     }
+    // Exact-value boundary for native frontends; does not format/parse the display.
+    CalcEngine::Rational CurrentValue();
+    void CurrentValue(CalcEngine::Rational const& value);
+    CalcEngine::Rational MemoryValue() const { return *m_memoryValue; }
     void SettingsChanged();
     bool IsCurrentTooBigForTrig();
     uint32_t GetCurrentRadix();

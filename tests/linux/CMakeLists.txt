@@ -1,0 +1,8 @@
+set(CMAKE_AUTOMOC ON)
+foreach(name IN ITEMS engine numeric)
+  add_executable(${name}_test ${name}_test.cpp)
+  target_link_libraries(${name}_test PRIVATE win7calc_engine Qt6::Test)
+  target_compile_definitions(${name}_test PRIVATE FIXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/fixtures")
+  add_test(NAME ${name} COMMAND ${name}_test)
+endforeach()
+add_test(NAME numeric_locale COMMAND numeric_test --comma)

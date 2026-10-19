@@ -91,6 +91,11 @@ namespace CalculationManager
         void SetProgrammerMode();
         void SendCommand(_In_ Command command);
 
+        CalcEngine::Rational CurrentValue() const { return m_currentCalculatorEngine->CurrentValue(); }
+        void CurrentValue(CalcEngine::Rational const& value) { m_currentCalculatorEngine->CurrentValue(value); }
+        CalcEngine::Rational LegacyMemory() const { return m_currentCalculatorEngine->MemoryValue(); }
+        void LegacyMemory(CalcEngine::Rational const& value) { m_currentCalculatorEngine->PersistedMemObject(value); }
+
         void MemorizeNumber();
         void MemorizedNumberLoad(_In_ unsigned int);
         void MemorizedNumberAdd(_In_ unsigned int);

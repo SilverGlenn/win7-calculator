@@ -1,0 +1,65 @@
+{
+  "provenance": "Windows 7 offline VM, 2026-10-19, direct keyboard and mouse input. Display crops in docs/reference/windows7-calculator/engine/. C=Esc, E=Delete, B=Backspace, equals=Enter.",
+  "standard": [
+    {
+      "id": "addition",
+      "keys": "12+3=",
+      "result": "15",
+      "capture": "addition-display.png"
+    },
+    {
+      "id": "immediate",
+      "keys": "2+3*4=",
+      "result": "20",
+      "capture": "immediate-display.png"
+    },
+    {
+      "id": "decimal",
+      "keys": "0.1+0.2=",
+      "result": "0.3",
+      "capture": "decimal-display.png"
+    },
+    {
+      "id": "repeat-equals",
+      "keys": "2+3==",
+      "result": "8",
+      "capture": "repeat-equals-display.png"
+    },
+    {
+      "id": "percent",
+      "keys": "200+10%=",
+      "result": "220",
+      "capture": "percent-display.png"
+    },
+    {
+      "id": "clear-entry",
+      "keys": "12+34E5=",
+      "result": "17",
+      "capture": "clear-entry-display.png"
+    },
+    {
+      "id": "clear-all",
+      "keys": "12+34C5=",
+      "result": "5",
+      "capture": "clear-all-display.png"
+    },
+    {
+      "id": "backspace",
+      "keys": "123B",
+      "result": "12",
+      "capture": "backspace-display.png"
+    },
+    {
+      "id": "divide-zero",
+      "keys": "1/0=",
+      "result": "Cannot divide by zero",
+      "capture": "divide-zero-display.png"
+    },
+    {
+      "id": "third",
+      "keys": "1/3=",
+      "result": "0.3333333333333333",
+      "capture": "third-display.png"
+    }
+  ]
+}

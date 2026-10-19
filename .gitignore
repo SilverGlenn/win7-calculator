@@ -291,6 +291,7 @@ __pycache__/
 
 # Local isolated implementation worktrees
 .worktrees/
+/build/linux*/
 
 # Calculator specific
 Generated Files/

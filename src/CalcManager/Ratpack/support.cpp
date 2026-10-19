@@ -18,6 +18,7 @@
 //
 //----------------------------------------------------------------------------
 
+#include <cmath> // ceil, log2: required when building without the MSVC precompiled header
 #include <string>
 #include <cstring>  // for memmove
 #include <iostream> // for wostream

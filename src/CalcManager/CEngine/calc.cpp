@@ -97,6 +97,7 @@ CCalcEngine::CCalcEngine(
     , m_angletype(AngleType::Degrees)
     , m_numwidth(NUM_WIDTH::QWORD_WIDTH)
     , m_HistoryCollector(pCalcDisplay, pHistoryDisplay, DEFAULT_DEC_SEPARATOR)
+    , m_decimalSeparator(DEFAULT_DEC_SEPARATOR)
     , m_groupSeparator(DEFAULT_GRP_SEPARATOR)
 {
     InitChopNumbers();
@@ -152,6 +153,19 @@ unique_ptr<Rational> CCalcEngine::PersistedMemObject()
 void CCalcEngine::PersistedMemObject(Rational const& memObject)
 {
     m_memoryValue = make_unique<Rational>(memObject);
+}
+
+CalcEngine::Rational CCalcEngine::CurrentValue()
+{
+    return m_bRecord ? m_input.ToRational(m_radix, m_precision) : m_currentVal;
+}
+
+void CCalcEngine::CurrentValue(CalcEngine::Rational const& value)
+{
+    ProcessCommand(IDC_CENTR);
+    m_currentVal = TruncateNumForIntMath(value);
+    m_bRecord = false;
+    ProcessCommand(IDC_SET_RESULT);
 }
 
 void CCalcEngine::SettingsChanged()
