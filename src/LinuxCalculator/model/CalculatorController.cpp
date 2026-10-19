@@ -3,7 +3,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QLocale>
-#include <QRegularExpression>
 #include <optional>
 
 namespace Win7Calc {
@@ -50,25 +49,6 @@ void CalculatorController::computeStatistic(Statistic statistic) {
     if(result.value)engine_.setValue(*result.value);
     else statisticNotice_=result.error==NumericError::InsufficientData?L"Enter data to calculate":result.error==NumericError::Overflow?L"Overflow":L"Invalid input";
     refresh();
-}
-void CalculatorController::copySamples() {
-    const auto index=state_.selectedSample;
-    if(index>=0&&index<static_cast<int>(state_.samples.size()))
-        QApplication::clipboard()->setText(QString::fromStdWString(state_.samples[index]));
-}
-void CalculatorController::pasteSamples() {
-    const auto text=QApplication::clipboard()->text();
-    if(text.isEmpty()||text.size()>4096){emit invalidInput(tr("Invalid input"));return;}
-    std::vector<CalcEngine::Rational> pending;
-    for(const auto&line:text.split(QRegularExpression("[\\r\\n]+"),Qt::SkipEmptyParts)){
-        const auto parsed=parseDecimal(line.toStdWString(),currentNumericLocale());
-        if(!parsed.value){emit invalidInput(tr("Invalid input"));return;}
-        pending.push_back(*parsed.value);
-    }
-    if(pending.empty()){emit invalidInput(tr("Invalid input"));return;}
-    samples_.insert(samples_.end(),pending.begin(),pending.end());syncSamples();
-    state_.selectedSample=static_cast<int>(samples_.size())-1;statisticNotice_.clear();
-    engine_.send(Command::CommandCENTR);refresh();
 }
 bool CalculatorController::historyAvailable() const {
     return state_.mode == Mode::Standard || state_.mode == Mode::Scientific;

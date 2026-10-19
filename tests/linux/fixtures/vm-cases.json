@@ -240,6 +240,8 @@
     "modeSwitchPreservesDataset": true,
     "selectionRecallsValue": false,
     "doubleClickEditsSample": true,
-    "clipboardSemanticsVerified": false
+    "clipboardSemanticsVerified": true,
+    "contextCopyTargets": "calculator primary, not selected sample",
+    "contextPasteTargets": "calculator entry; dataset unchanged until Add"
   }
 }

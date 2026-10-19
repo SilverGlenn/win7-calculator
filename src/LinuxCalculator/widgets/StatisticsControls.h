@@ -18,5 +18,6 @@ private:
  QAbstractButton *up_,*down_;
  qreal scale_=1;
  int count_=0;
+ void showContextMenu(QPoint globalPosition);
 };
 }

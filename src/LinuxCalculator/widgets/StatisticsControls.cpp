@@ -35,13 +35,16 @@ StatisticsControls::StatisticsControls(CalculatorController&c,QWidget*p):QWidget
  connect(samples_,&QListWidget::itemChanged,this,[this](QListWidgetItem*item){controller_.updateSample(samples_->row(item),item->text());});
  connect(up_,&QAbstractButton::clicked,this,[this]{controller_.selectSample(qMax(0,controller_.state().selectedSample-1));});
  connect(down_,&QAbstractButton::clicked,this,[this]{controller_.selectSample(qMin(count_-1,controller_.state().selectedSample+1));});
- connect(samples_,&QWidget::customContextMenuRequested,this,[this](QPoint position){
-  QMenu menu(this);auto*copy=menu.addAction(tr("Copy"));copy->setEnabled(controller_.state().selectedSample>=0);
-  auto*paste=menu.addAction(tr("Paste"));paste->setEnabled(!QApplication::clipboard()->text().isEmpty());
-  menu.addSeparator();auto*clear=menu.addAction(tr("Clear dataset"));clear->setEnabled(count_>0);
-  auto*action=menu.exec(samples_->viewport()->mapToGlobal(position));
-  if(action==copy)controller_.copySamples();else if(action==paste)controller_.pasteSamples();else if(action==clear)controller_.clearSamples();
- });
+ setContextMenuPolicy(Qt::CustomContextMenu);
+ connect(this,&QWidget::customContextMenuRequested,this,[this](QPoint p){showContextMenu(mapToGlobal(p));});
+ connect(samples_,&QWidget::customContextMenuRequested,this,[this](QPoint p){showContextMenu(samples_->viewport()->mapToGlobal(p));});
+}
+void StatisticsControls::showContextMenu(QPoint globalPosition){
+ QMenu menu(this);auto*copy=menu.addAction(tr("Copy"));
+ auto*paste=menu.addAction(tr("Paste"));paste->setEnabled(!QApplication::clipboard()->text().isEmpty());
+ menu.addSeparator();auto*clear=menu.addAction(tr("Clear dataset"));clear->setEnabled(count_>0);
+ auto*action=menu.exec(globalPosition);
+ if(action==copy)controller_.copy();else if(action==paste)controller_.paste();else if(action==clear)controller_.clearSamples();
 }
 void StatisticsControls::sync(const CalculatorState&s,qreal scale){
  setVisible(s.mode==Mode::Statistics);scale_=scale;count_=static_cast<int>(s.samples.size());

@@ -29,8 +29,6 @@ public:
  void selectSample(int);
  void updateSample(int,const QString&);
  void computeStatistic(Statistic);
- void copySamples();
- void pasteSamples();
 private:
  void refresh();
  Engine engine_;

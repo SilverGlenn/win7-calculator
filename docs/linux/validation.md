@@ -36,7 +36,7 @@ This report records implementation evidence, **not final fidelity acceptance**.
 - “Enter data to calculate” is an informational notice, not an arithmetic lockout. Singleton population deviation is zero; singleton sample deviation shows that notice.
 - Native Wayland screenshots: [populated](images/statistics-task6.png), [empty](images/statistics-empty-task6.png), [notice](images/statistics-notice-task6.png). Notice/result font calibration remains visibly incomplete.
 - Inline edit commits through Qt's queued delegate event; the test awaits the committed model value. A preset-Statistics constructor regression also fixed a previously hidden keypad initialization-sentinel collision.
-- Dataset context Copy currently copies selected sample text, and Paste validates all newline-delimited values before changing data. Those actions exist in the original UI, but the guest clipboard round-trip probe was inconclusive: exact original clipboard serialization/selection behavior remains an explicit parity check, not a verified claim.
+- Follow-up VM verification resolved the context clipboard behavior: Copy/Paste acts on the **calculator value**, not the selected dataset row. Copying primary9 while dataset row2 is selected, clearing the entry, then pasting restores9 without changing Count1. The earlier selected-sample/bulk-dataset assumption was removed. A real popup-menu regression failed with clipboard2 before the fix and passed with clipboard9 afterward. The same context menu is available over the result area; Clear dataset remains the dataset-specific action.
 
 ## Known incomplete work / visual differences
 
