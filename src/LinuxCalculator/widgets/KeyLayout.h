@@ -12,6 +12,8 @@ struct KeySpec {
  QRect rect;
  std::optional<CalculationManager::Command> command;
  KeyAppearance appearance = KeyAppearance::Operator;
+ bool enabled=true, checkable=false, checked=false;
+ int fontPixels=0;
 };
 QSize clientSize(Mode,Panel,bool historyVisible,qreal logicalScale=1);
 QRect scaledRect(QRect,qreal);

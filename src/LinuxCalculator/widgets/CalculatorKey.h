@@ -7,6 +7,7 @@ class CalculatorKey final:public QAbstractButton {
  Q_OBJECT
 public:
  CalculatorKey(const KeySpec&,QWidget* parent=nullptr);
+ void setSpec(const KeySpec&);
  void setLogicalScale(qreal);
 protected:
  void paintEvent(QPaintEvent*) override;

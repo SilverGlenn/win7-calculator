@@ -6,10 +6,21 @@
 #include <QStyleOptionFocusRect>
 namespace Win7Calc {
 CalculatorKey::CalculatorKey(const KeySpec& spec,QWidget* parent):QAbstractButton(parent),spec_(spec) {
- setObjectName(spec.id);setText(spec.text);setAccessibleName(spec.accessibleName);
+ setSpec(spec);
  setFocusPolicy(Qt::StrongFocus);setAttribute(Qt::WA_Hover);setMouseTracking(true);
 }
-void CalculatorKey::setLogicalScale(qreal s){scale_=s;update();}
+void CalculatorKey::setSpec(const KeySpec& spec){
+ spec_=spec;setObjectName(spec.id);setText(spec.text);setAccessibleName(spec.accessibleName);
+ setEnabled(spec.enabled);setCheckable(spec.checkable);if(spec.checkable)setChecked(spec.checked);update();
+}
+void CalculatorKey::setLogicalScale(qreal s){
+ scale_=s;
+ QFont f=font();
+ int pixels=spec_.fontPixels?spec_.fontPixels:(spec_.appearance==KeyAppearance::Number?14:(spec_.appearance==KeyAppearance::Memory?11:12));
+ if(spec_.id=="equals")pixels=20;
+ if(spec_.id=="backspace")pixels=21;
+ f.setPixelSize(qRound(pixels*scale_));f.setBold(false);setFont(f);update();
+}
 void CalculatorKey::paintEvent(QPaintEvent*) {
  QPainter p(this);p.setRenderHint(QPainter::Antialiasing);
  const QRectF bounds(.5,.5,width()-1,height()-1);
@@ -34,12 +45,7 @@ void CalculatorKey::paintEvent(QPaintEvent*) {
  p.setPen(QPen(QBrush(border),1));p.setBrush(fill);p.drawRoundedRect(bounds,2*scale_,2*scale_);
  p.setBrush(Qt::NoBrush);p.setPen(QColor(255,255,255,pressed?110:230));
  p.drawRoundedRect(bounds.adjusted(1,1,-1,-1),1*scale_,1*scale_);
- QFont f=font();
- const int pixels=spec_.appearance==KeyAppearance::Number?14:(spec_.appearance==KeyAppearance::Memory?11:12);
- f.setPixelSize(qRound(pixels*scale_));f.setBold(false);
- if(spec_.id=="equals")f.setPixelSize(qRound(20*scale_));
- if(spec_.id=="backspace")f.setPixelSize(qRound(21*scale_));
- p.setFont(f);p.setPen(isEnabled()?LegacyPalette::keyText:LegacyPalette::disabledText);
+ p.setFont(font());p.setPen(isEnabled()?LegacyPalette::keyText:LegacyPalette::disabledText);
  p.drawText(rect(),Qt::AlignCenter,text());
  if(hasFocus()&&style()->styleHint(QStyle::SH_UnderlineShortcut,nullptr,this)){
   QPen pen(QColor("#6d7584"));pen.setStyle(Qt::DotLine);p.setPen(pen);p.setBrush(Qt::NoBrush);

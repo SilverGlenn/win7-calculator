@@ -61,5 +61,90 @@
       "result": "0.3333333333333333",
       "capture": "third-display.png"
     }
-  ]
+  ],
+  "scientific": {
+    "provenance": "Mouse-only entry and controls, direct VM captures 2026-10-19; compact Scientific geometry verified before entry. Discarded unreliable keyboard-entry batches. Refer to docs/reference/windows7-calculator/scientific/.",
+    "cases": [
+      {
+        "id": "sin-degrees",
+        "result": "0.5"
+      },
+      {
+        "id": "inverse-sin",
+        "result": "30"
+      },
+      {
+        "id": "factorial-five",
+        "result": "120"
+      },
+      {
+        "id": "log-negative-one",
+        "result": "Invalid input"
+      },
+      {
+        "id": "dms-12.5",
+        "result": "12.3"
+      },
+      {
+        "id": "degrees-12.3",
+        "result": "12.5"
+      },
+      {
+        "id": "sin-pi-over-two-radians",
+        "result": "1"
+      },
+      {
+        "id": "sin-100-grads",
+        "result": "1"
+      },
+      {
+        "id": "cube-root-negative-eight",
+        "result": "-2"
+      },
+      {
+        "id": "exponent-one-e-three",
+        "result": "1000"
+      },
+      {
+        "id": "inverse-sinh-zero",
+        "result": "0"
+      },
+      {
+        "id": "fraction-12.5",
+        "result": "0.5"
+      },
+      {
+        "id": "integer-negative-12.5",
+        "result": "-12"
+      },
+      {
+        "id": "two-power-three",
+        "result": "8"
+      },
+      {
+        "id": "27-root-three",
+        "result": "3"
+      },
+      {
+        "id": "scientific-format-123.45",
+        "result": "1.2345e+2"
+      }
+    ],
+    "inverseConsumedBy": [
+      "sin",
+      "cos",
+      "tan",
+      "sinh",
+      "cosh",
+      "tanh",
+      "ln",
+      "int",
+      "dms",
+      "pi"
+    ],
+    "inversePersistsThrough": [
+      "factorial"
+    ],
+    "modeEntryResetsAngleToDegrees": true
+  }
 }

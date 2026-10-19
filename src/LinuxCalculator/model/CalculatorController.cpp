@@ -32,6 +32,8 @@ void CalculatorController::setMode(Mode mode) {
     state_.mode = mode;
     state_.inverse = false;
     engine_.setMode(mode == Mode::Statistics ? Mode::Standard : mode);
+    state_.angle = AngleUnit::Degrees;
+    if (mode == Mode::Scientific) engine_.send(Command::CommandDEG);
     refresh();
 }
 void CalculatorController::setPanel(Panel panel) {
@@ -51,6 +53,18 @@ void CalculatorController::setDigitGrouping(bool grouping) {
 }
 void CalculatorController::send(Command command) {
     engine_.send(command);
+    if (command == Command::CommandINV) state_.inverse = !state_.inverse;
+    if (command == Command::CommandDEG) state_.angle = AngleUnit::Degrees;
+    if (command == Command::CommandRAD) state_.angle = AngleUnit::Radians;
+    if (command == Command::CommandGRAD) state_.angle = AngleUnit::Grads;
+    if (command == Command::CommandCLEAR || command == Command::CommandCENTR) state_.inverse = false;
+    if (!engine_.state().error) switch(command) {
+    case Command::CommandCHOP: case Command::CommandSIN: case Command::CommandCOS: case Command::CommandTAN:
+    case Command::CommandSINH: case Command::CommandCOSH: case Command::CommandTANH: case Command::CommandLN:
+    case Command::CommandDMS: case Command::CommandDegrees: case Command::CommandPI:
+        state_.inverse = false; break;
+    default: break;
+    }
     refresh();
 }
 void CalculatorController::copy() {
