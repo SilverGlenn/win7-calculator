@@ -27,3 +27,12 @@ set_source_files_properties(${CORE_SOURCES} PROPERTIES
   COMPILE_OPTIONS "-Wno-missing-field-initializers;-Wno-sign-compare")
 add_library(win7calc_model STATIC model/CalculatorController.cpp model/CalculatorController.h)
 target_link_libraries(win7calc_model PUBLIC win7calc_engine Qt6::Widgets)
+add_library(win7calc_widgets STATIC
+ widgets/KeyLayout.cpp widgets/CalculatorWindow.cpp widgets/CalculatorWindow.h
+ widgets/CalculatorKey.cpp widgets/CalculatorKey.h widgets/CalculatorDisplay.cpp widgets/CalculatorDisplay.h
+ widgets/Keypad.cpp widgets/Keypad.h)
+target_link_libraries(win7calc_widgets PUBLIC win7calc_model)
+qt_add_resources(CALCULATOR_RESOURCES resources.qrc)
+target_sources(win7calc_widgets PRIVATE ${CALCULATOR_RESOURCES})
+add_executable(win7-calculator main.cpp)
+target_link_libraries(win7-calculator PRIVATE win7calc_widgets)
