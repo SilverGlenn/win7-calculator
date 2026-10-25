@@ -79,6 +79,29 @@ private slots:
    e.setMode(Mode::Programmer); QVERIFY(e.pasteNumber(L"10")); QCOMPARE(e.state().primary,L"10");
    e.send(Command::CommandHex); QCOMPARE(e.state().primary,L"A");
  }
+ void programmerReentryResetsEvaluatorRadix_data() {
+   QTest::addColumn<int>("radix"); QTest::addColumn<bool>("leaveError");
+   QTest::newRow("hex-error") << int(Command::CommandHex) << true;
+   QTest::newRow("oct-error") << int(Command::CommandOct) << true;
+   QTest::newRow("bin-error") << int(Command::CommandBin) << true;
+   QTest::newRow("hex-normal") << int(Command::CommandHex) << false;
+   QTest::newRow("oct-normal") << int(Command::CommandOct) << false;
+   QTest::newRow("bin-normal") << int(Command::CommandBin) << false;
+ }
+ void programmerReentryResetsEvaluatorRadix() {
+   QFETCH(int,radix); QFETCH(bool,leaveError);
+   Engine e; e.setMode(Mode::Programmer); e.send(static_cast<Command>(radix));
+   input(e,leaveError ? "1/0=" : "11");
+   QCOMPARE(e.state().error,leaveError);
+   // Leave the error unrecovered: no Clear or successful paste before reentry.
+   e.setMode(Mode::Standard); e.setMode(Mode::Programmer);
+   QVERIFY(!e.state().error); QCOMPARE(e.state().primary,L"0");
+   QVERIFY(e.pasteNumber(L"10"));
+   QVERIFY(e.value()==CalcEngine::Rational(10)); QCOMPARE(e.state().primary,L"10");
+   const auto copied=e.state().primary;
+   e.send(Command::CommandCLEAR); QVERIFY(e.pasteNumber(copied));
+   QVERIFY(e.value()==CalcEngine::Rational(10)); QCOMPARE(e.state().primary,L"10");
+ }
  void exactValueTransfer() {Engine e;auto third=parseDecimal(L"1");auto three=parseDecimal(L"3");QVERIFY(third.value&&three.value);auto value=*third.value / *three.value;e.setValue(value);QVERIFY(e.value()==value);e.send(Command::CommandMUL);input(e,"3=");QCOMPARE(e.state().primary,L"1");}
  void resourceCompleteness() { Resources r;for(auto id:g_sids) QVERIFY2(r.contains(id),qPrintable(QString::fromStdWString(std::wstring(id)))); QCOMPARE(r.GetCEngineString(L"sDecimal"),L".");QCOMPARE(r.GetCEngineString(L"sThousand"),L",");QCOMPARE(r.GetCEngineString(L"sGrouping"),L"3;0");}
 };

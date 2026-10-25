@@ -98,7 +98,13 @@ void Engine::setMode(Mode mode) {
     switch (mode) {
     case Mode::Standard: impl_->manager->SetStandardMode(); break;
     case Mode::Scientific: impl_->manager->SetScientificMode(); break;
-    case Mode::Programmer: impl_->manager->SetProgrammerMode(); impl_->radix = 10; break;
+    case Mode::Programmer:
+        impl_->manager->SetProgrammerMode();
+        // The retained manager selects Decimal before clearing errors, so a
+        // previously failed Programmer engine may have ignored that selection.
+        impl_->manager->SendCommand(Command::CommandDec);
+        impl_->radix = 10;
+        break;
     case Mode::Statistics: break;
     }
     impl_->manager->LegacyMemory(impl_->memory);
