@@ -7,11 +7,11 @@ jobs:
   native-linux:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - name: Native build dependencies
-        run: sudo apt-get update && sudo apt-get install -y ninja-build qt6-base-dev desktop-file-utils
+        run: sudo apt-get update && sudo apt-get install -y ninja-build qt6-base-dev desktop-file-utils python3-pil
       - name: Configure
-        run: cmake -S . -B build/linux -G Ninja -DCMAKE_BUILD_TYPE=Release
+        run: cmake -S . -B build/linux -G Ninja -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE=/usr/bin/python3
       - name: Build
         run: cmake --build build/linux --parallel 2
       - name: Packaging unittest (isolated HOME)

@@ -4,7 +4,7 @@ This is an in-progress native Linux target, separate from the upstream Windows U
 
 ## Build and test
 
-Requires C++20, CMake 3.25+, Ninja, Python3, and Qt6 Core/Gui/Widgets/Test development packages (Qt 6.4+; validated host Qt 6.10.2).
+Requires C++20, CMake 3.25+, Ninja, Python3 with Pillow for image-comparison tests, and Qt6 Core/Gui/Widgets/Test development packages (Qt 6.4+; validated host Qt 6.10.2). Pillow must be available to the Python interpreter selected by CMake. The calculator itself does not use Pillow.
 
 ```sh
 cmake -S . -B build/linux -G Ninja -DCMAKE_BUILD_TYPE=Release
@@ -85,3 +85,18 @@ upgrade. `desktop-file-validate` is run when available. CTest registers the same
 suite with its current build directory, avoiding a nested build. CI builds the
 native target, runs packaging and native tests, and checks whitespace separately
 from the unchanged Windows workflow.
+
+## Screenshot comparison verification
+
+CTest also registers the synthetic image-tool suite as `image_compare`. Run it
+alone with `ctest --test-dir build/linux -R '^image_compare$' --output-on-failure`,
+or without a CMake build:
+
+```sh
+python3 -m unittest discover -s tests/linux -p 'test_image_compare.py' -v
+```
+
+See [image-comparison.md](image-comparison.md) for the strict API/CLI, raw
+metrics, output artifacts and narrow explicit Modern-menu exclusion. Use fresh
+output directories. Synthetic test success does not establish application
+appearance or pixel-perfect parity; full reference calibration remains pending.
