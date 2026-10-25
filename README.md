@@ -8,6 +8,20 @@ Calculator ships regularly with new features and bug fixes. You can get the late
 
 <img src="docs/Images/CalculatorScreenshot.png" alt="Calculator Screenshot" width="450px" />
 
+## Native Linux preview
+
+A separate Qt 6 frontend provides Standard, Scientific, Programmer and Statistics
+modes using the retained Qt-free arithmetic core. History, Units, Dates and
+Worksheets are disabled; matching numeric fonts and final visual fidelity remain
+pending. This is not the completed Windows 7 reproduction. The Windows feature
+list below describes upstream, not Linux preview acceptance.
+
+See [Linux build and reversible user-local packaging](docs/linux/build.md) for
+build/tests, `scripts/linux/run.sh`, and explicit install/update/uninstall tools.
+Runtime resources are embedded; system Qt is required, with no runtime dependency
+on a source checkout or AeroThemePlasma. The Linux preview has no telemetry and
+does not change desktop themes, defaults or global shortcuts.
+
 ## Features
 - Standard Calculator functionality which offers basic operations and evaluates commands immediately as they are entered.
 - Scientific Calculator functionality which offers expanded operations and evaluates commands using order of operations.

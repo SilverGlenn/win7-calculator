@@ -1,0 +1,26 @@
+name: Native Linux preview
+on:
+  push:
+  pull_request:
+
+jobs:
+  native-linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Native build dependencies
+        run: sudo apt-get update && sudo apt-get install -y ninja-build qt6-base-dev desktop-file-utils
+      - name: Configure
+        run: cmake -S . -B build/linux -G Ninja -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build/linux --parallel 2
+      - name: Packaging unittest (isolated HOME)
+        env:
+          WIN7CALC_TEST_BUILD_DIR: ${{ github.workspace }}/build/linux
+        run: python3 -m unittest discover -s tests/linux -p 'install_test.py' -v
+      - name: Native tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: ctest --test-dir build/linux --output-on-failure
+      - name: Whitespace
+        run: git diff --check && git show --format= --check HEAD

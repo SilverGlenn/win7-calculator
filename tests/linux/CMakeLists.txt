@@ -5,6 +5,11 @@ foreach(name IN ITEMS engine numeric)
   target_compile_definitions(${name}_test PRIVATE FIXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/fixtures")
   add_test(NAME ${name} COMMAND ${name}_test)
 endforeach()
+add_test(NAME install_user COMMAND Python3::Interpreter -m unittest discover
+  -s "${CMAKE_CURRENT_SOURCE_DIR}" -p install_test.py -v)
+set_tests_properties(install_user PROPERTIES
+  ENVIRONMENT "WIN7CALC_TEST_BUILD_DIR=${PROJECT_BINARY_DIR}"
+  TIMEOUT 60)
 add_test(NAME numeric_locale COMMAND numeric_test --comma)
 add_executable(controller_test controller_test.cpp)
 target_link_libraries(controller_test PRIVATE win7calc_model Qt6::Test)

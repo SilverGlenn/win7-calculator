@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Calculator
+Comment=Native Linux calculator preview
+Exec=@EXEC@
+TryExec=@TRYEXEC@
+Icon=accessories-calculator
+Terminal=false
+Categories=Utility;Calculator;
+StartupNotify=true
+StartupWMClass=org.win7calculator.Calculator

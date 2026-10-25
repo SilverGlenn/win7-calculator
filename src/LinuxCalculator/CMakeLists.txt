@@ -38,3 +38,16 @@ qt_add_resources(CALCULATOR_RESOURCES resources.qrc)
 target_sources(win7calc_widgets PRIVATE ${CALCULATOR_RESOURCES})
 add_executable(win7-calculator main.cpp)
 target_link_libraries(win7-calculator PRIVATE win7calc_widgets)
+
+# Use the same conflict checks, atomic replacement and ownership manifest for
+# CMake and direct user installs. No runtime path refers back to the source.
+install(CODE "
+  execute_process(
+    COMMAND \"${PROJECT_SOURCE_DIR}/scripts/linux/install-user.sh\"
+      --build-dir \"${PROJECT_BINARY_DIR}\"
+      --prefix \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}\"
+    RESULT_VARIABLE install_result)
+  if(NOT install_result EQUAL 0)
+    message(FATAL_ERROR \"Calculator preview installation failed\")
+  endif()
+")
