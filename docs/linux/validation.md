@@ -45,4 +45,14 @@ This report records implementation evidence, **not final fidelity acceptance**.
 - Initial native focus rectangle and menu-mnemonic visibility differ from the clean original baseline; keyboard/mouse focus-state calibration remains in Task 11.
 - Gradient, glyph and popup-menu calibration is not complete. Correct dimensions and passing input tests are not a pixel-perfect claim.
 - Native startup logs contain pre-existing SVG warnings from the installed Kvantum theme. The missing embedded application-icon warning was fixed; theme resources were not edited.
-- No user-local installation, default-app change or final whole-branch review has happened yet.
+- An operator-requested user-local **four-mode preview** was installed on 2026-10-19; see [preview-installation.md](preview-installation.md). That is not final packaging or full-fidelity acceptance. The follow-up below did not update the installed application or change defaults.
+
+## 2026-10-25: clipboard repairs and packaging tooling
+
+This is a bounded follow-up, not completion of the legacy feature plan. Integrated code/tooling commit: `e9fe2c857d03689200199637a866b8f467911836` on `feature/native-win7-calculator`.
+
+- Programmer paste now parses plain signed integer text in the active radix. Copy/Clear/Paste preserves Hex `FF` and `10`, with regression coverage for Oct/Bin and signed/unsigned 8/16/32/64-bit boundaries. Malformed input preserves the current calculation. A related typed-negative bit-view exception was reproduced and corrected without changing the engine's numeric value.
+- A successful Statistics paste clears the obsolete “Enter data to calculate” notice; a rejected paste preserves it. Pasting does not alter the dataset, and Add consumes the displayed value.
+- Reversible preview installation tooling now provides a copied executable, desktop entry, licenses and a validated ownership manifest. Isolated tests cover update/removal, unsafe manifests, path quoting, preservation of pre-existing empty directories, and literal template tokens in prefixes. Updates replace individual files atomically; this is **not** a crash-safe multi-file transaction, and concurrent operations on one prefix are unsupported. Legacy/manual installations are refused rather than silently adopted.
+- Independent task reviews accepted the clipboard repair and the packaging correction. A fresh external Release build of the combined source passed **10/10 CTest processes**, including eight isolated installation unittest cases. The original three clipboard diagnostic assertions all passed. Five UI/layout suites passed at 125%, 150% and 200%; the full ten-process suite also passed with Fusion. Existing retained-RatPack compiler warnings remain.
+- Install tests used temporary HOME/XDG locations and prefixes; no actual user-local payload was replaced and no existing calculator process was restarted. Hosted CI, Windows/MSVC compatibility, fresh live Plasma interaction and new reference-image comparisons were not verified in this follow-up. The missing legacy features and visual/font differences listed above remain acceptance blockers.
