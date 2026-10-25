@@ -26,6 +26,8 @@ File numbering follows capture order; some intermediate captures were omitted be
 
 Additional parent-verified history editing, error, navigation and capacity evidence captured on 2026-10-25 is indexed in [`history-2026-10-25/README.md`](history-2026-10-25/README.md). Exact clipboard serialization, ultimate capacity and complete Scientific editing grammar are explicitly distinguished from verified observations.
 
+The complete11-category/95-unit inventory and105 numeric conversion observations are indexed in [`units-2026-10-25/README.md`](units-2026-10-25/README.md), including legacy definitions that differ from modern constants, temperature offsets, notation and input-error behavior.
+
 ## Measured baseline geometry
 
 Coordinates below refer to the source screenshots, with the window at (125,125); saved crops begin at that point. Integer measurements include both endpoints where stated.
