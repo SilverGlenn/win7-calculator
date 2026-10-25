@@ -24,6 +24,8 @@ The VM uses Windows 7 Basic graphics: its opaque title bar is **not** an Aero Gl
 
 File numbering follows capture order; some intermediate captures were omitted because they were taken before the guest had finished repainting. The retained files were visually inspected; they are not all independent test cases.
 
+Additional parent-verified history editing, error, navigation and capacity evidence captured on 2026-10-25 is indexed in [`history-2026-10-25/README.md`](history-2026-10-25/README.md). Exact clipboard serialization, ultimate capacity and complete Scientific editing grammar are explicitly distinguished from verified observations.
+
 ## Measured baseline geometry
 
 Coordinates below refer to the source screenshots, with the window at (125,125); saved crops begin at that point. Integer measurements include both endpoints where stated.

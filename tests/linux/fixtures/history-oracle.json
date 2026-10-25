@@ -1,0 +1,140 @@
+{
+  "provenance": {
+    "date": "2026-10-25",
+    "source": "operator-authorized offline Windows7 VM; parent-controlled Calculator only",
+    "resolution": [
+      1440,
+      900
+    ],
+    "outerOrigin": [
+      125,
+      125
+    ],
+    "captures": "docs/reference/windows7-calculator/history-2026-10-25",
+    "unscaled": true
+  },
+  "shortcuts": {
+    "edit": "F2",
+    "cancel": "Esc",
+    "clear": "Ctrl+Shift+D",
+    "first": "Home",
+    "last": "End"
+  },
+  "facts": {
+    "rowsContainExpressionsOnly": true,
+    "selectionRecallsResultWithoutNewRow": true,
+    "editWholeExpression": true,
+    "keypadInsertsIntoDraft": true,
+    "editReplacesSelectedRow": true,
+    "cancelRestoresCommittedEntryAndResult": true,
+    "invalidDraftPreservesCommittedResult": true,
+    "separateStandardScientificStores": true,
+    "modeReentrySelectsLastRow": true,
+    "modeReentryPrimary": "0",
+    "clearPreservesPrimary": "1035",
+    "retainedEntriesLowerBound": 35,
+    "ultimateCapacity": null
+  },
+  "cases": [
+    {
+      "id": "selection",
+      "expressions": [
+        "12+3",
+        "4*5",
+        "6-2"
+      ],
+      "results": [
+        "15",
+        "20",
+        "4"
+      ],
+      "selectedIndex": 0,
+      "primary": "15",
+      "capture": "01-selected.png"
+    },
+    {
+      "id": "edit-commit",
+      "originalExpression": "12+3",
+      "draft": "9+2",
+      "committedExpression": "9 + 2",
+      "primary": "11",
+      "historyCount": 3,
+      "capture": "06-committed.png"
+    },
+    {
+      "id": "edit-cancel",
+      "committedExpression": "9 + 2",
+      "draft": "8/0",
+      "cancelledPrimary": "11",
+      "capture": "08-cancelled.png"
+    },
+    {
+      "id": "invalid-syntax",
+      "draft": "9+",
+      "message": "Unexpected end of expression",
+      "previousPrimary": "11",
+      "keepsEditorOpen": true,
+      "capture": "09-incomplete.png"
+    },
+    {
+      "id": "invalid-domain",
+      "draft": "8/0",
+      "message": "Cannot divide by zero",
+      "previousPrimary": "11",
+      "keepsEditorOpen": true,
+      "capture": "10-divide-zero.png"
+    },
+    {
+      "id": "retained-history",
+      "firstInput": "1001+0=",
+      "lastInput": "1035+0=",
+      "count": 35,
+      "homePrimary": "1001",
+      "endPrimary": "1035",
+      "captures": [
+        "14-thirty-five.png",
+        "15-earliest.png",
+        "16-latest.png"
+      ]
+    },
+    {
+      "id": "standard-edit-evaluation",
+      "mode": "Standard",
+      "draft": "2+3*4",
+      "primary": "20",
+      "capture": "18-standard-precedence.png"
+    },
+    {
+      "id": "scientific-notation",
+      "mode": "Scientific",
+      "expression": "sind(30)",
+      "primary": "0.5",
+      "capture": "19-scientific-sine.png"
+    },
+    {
+      "id": "scientific-unknown-function",
+      "draft": "sin(60)",
+      "message": "Unknown function",
+      "previousPrimary": "0.5",
+      "keepsEditorOpen": true,
+      "capture": "21-unknown-function.png"
+    },
+    {
+      "id": "scientific-angle-explicit",
+      "draft": "sind(60)",
+      "primary": "0.86602540378443864676372317075294",
+      "capture": "22-sind60.png"
+    },
+    {
+      "id": "scientific-sqrt",
+      "draft": "sqrt(9)",
+      "primary": "3",
+      "capture": "23-sqrt.png"
+    }
+  ],
+  "unverified": [
+    "Exact Copy history text serialization; Calculator-only single-line paste probe inconclusive",
+    "Ultimate history capacity above35",
+    "Complete Scientific editing grammar"
+  ]
+}
