@@ -54,12 +54,8 @@ def main():
     for relative in sorted(PAYLOAD):
         (prefix / relative).unlink(missing_ok=True)
     manifest.unlink()
-    # Never recurse: unrelated files, directories and user state survive.
-    for relative in ['lib/win7-calculator', 'share/applications', 'bin', 'lib', 'share']:
-        try:
-            (prefix / relative).rmdir()
-        except OSError:
-            pass
+    # The manifest owns files only. Leave all directories intact: emptiness
+    # does not establish that a directory was created by this installer.
 
 try:
     main()

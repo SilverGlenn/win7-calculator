@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shlex
 import subprocess
 import sys
@@ -60,7 +61,9 @@ def main():
     safe_path(prefix)
     launcher = str(prefix / 'bin/win7-calculator')
     desktop = (root / 'packaging/linux/org.win7calculator.Calculator.desktop.in').read_text()
-    desktop = desktop.replace('@EXEC@', desktop_exec(launcher)).replace('@TRYEXEC@', desktop_value(launcher))
+    substitutions = {'@EXEC@': desktop_exec(launcher), '@TRYEXEC@': desktop_value(launcher)}
+    # Match only the original template; token-like text in prefixes is data.
+    desktop = re.sub(r'@(?:EXEC|TRYEXEC)@', lambda match: substitutions[match.group()], desktop)
     readme = '''Native Linux Calculator preview
 Standard, Scientific, Programmer and Statistics are available. History, Units,
 Dates and Worksheets are disabled. Numeric fonts and final fidelity are pending.

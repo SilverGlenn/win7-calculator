@@ -123,6 +123,43 @@ class InstallTest(unittest.TestCase):
         self.assertFalse(desktop.exists())
         self.assertEqual(unrelated.read_text(), 'not ours')
 
+    def test_uninstall_preserves_preexisting_empty_directories(self):
+        # Emptiness is not ownership: all these directories predate installation.
+        directories = [self.prefix / relative for relative in
+                       ['', 'bin', 'lib', 'lib/win7-calculator',
+                        'share', 'share/applications', 'unrelated-empty']]
+        for directory in directories:
+            directory.mkdir(parents=True, exist_ok=True)
+        unrelated = self.prefix / 'keep.txt'
+        unrelated.write_text('not calculator payload')
+        self.install()
+        self.tool(self.prefix / 'lib/win7-calculator/uninstall-user.sh',
+                  '--prefix', self.prefix)
+        self.tool(UNINSTALL, '--prefix', self.prefix)
+        for directory in directories:
+            with self.subTest(directory=directory):
+                self.assertTrue(directory.is_dir(), 'preexisting directory removed')
+        self.assertEqual(unrelated.read_text(), 'not calculator payload')
+        self.assertFalse((self.prefix / 'bin/win7-calculator').exists())
+        self.assertFalse((self.prefix / 'lib/win7-calculator/INSTALL.json').exists())
+
+    def test_desktop_prefix_tokens_are_not_resubstituted(self):
+        # Both tokens must remain literal data even after the template is filled.
+        self.prefix = self.prefix / '@TRYEXEC@-@EXEC@'
+        self.install()
+        desktop = self.prefix / 'share/applications/org.win7calculator.Calculator.desktop'
+        entry = dict(line.split('=', 1) for line in desktop.read_text().splitlines()
+                     if '=' in line)
+        decoded = entry['Exec'].replace('\\\\', '\\')
+        parsed = self.tool('/bin/sh', '-c', 'set -- ' + decoded.replace('%%', '%')
+                           + '; printf "%s\\n" "$@"')
+        self.assertEqual(parsed.stdout.splitlines(),
+                         [str(self.prefix / 'bin/win7-calculator')])
+        self.assertEqual(entry['TryExec'].replace('\\\\', '\\'),
+                         str(self.prefix / 'bin/win7-calculator'))
+        if shutil.which('desktop-file-validate'):
+            subprocess.run(['desktop-file-validate', str(desktop)], check=True)
+
     def test_invalid_build_and_conflicts_do_not_mutate(self):
         self.tool(INSTALL, '--build-dir', self.home / 'absent', '--prefix', self.prefix, ok=False)
         self.assertFalse(self.prefix.exists())
