@@ -62,7 +62,12 @@ void CalculatorController::refresh() {
     }
     if (state_.mode == Mode::Programmer && !state_.display.error) {
         const auto mask = state_.wordBits == 64 ? UINT64_MAX : ((std::uint64_t{1} << state_.wordBits) - 1);
-        state_.bitPattern = engine_.value().ToUInt64_t() & mask;
+        // Recorded decimal input can be negative even though completed integer
+        // results are unsigned internally. Normalize a copy, not the engine value.
+        const auto modulus = CalcEngine::Rational(mask) + CalcEngine::Rational(1);
+        auto bits = engine_.value() % modulus;
+        if (bits < CalcEngine::Rational(0)) bits += modulus;
+        state_.bitPattern = bits.ToUInt64_t();
     }
     emit stateChanged();
 }
@@ -130,6 +135,7 @@ void CalculatorController::paste() {
         emit invalidInput(tr("Invalid input"));
         return;
     }
+    statisticNotice_.clear();
     refresh();
 }
 bool CalculatorController::handleKey(QKeyEvent* event) {
